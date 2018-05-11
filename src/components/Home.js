@@ -1,51 +1,99 @@
-import React from "react"
 import PropTypes from "prop-types"
-import { Grid, Paper, List } from "material-ui"
-import { ListItem, ListItemText } from "material-ui/List"
+import React from "react"
 
-const styles = {
-  Paper: { padding: 20, marginTop: 10, marginBottom: 10, overflowY: "auto", height: 400 },
+import Grid from "material-ui/Grid"
+import { withStyles } from "material-ui/styles"
+import Button from "material-ui/Button"
+import TextField from "material-ui/TextField"
+import Fade from "material-ui/transitions/Fade"
+import red from "material-ui/colors/red"
+
+import Loading from "./Loading"
+
+const styles = () => ({
+  root: {
+    flexGrow: 1,
+  },
+  error: {
+    color: red[500],
+  },
+})
+
+const loginObj = {
+  userName: "",
+  password: "",
+}
+const onUserNameChange = event => {
+  loginObj.userName = event.target.value
 }
 
-const Home = ({ contacts, messages }) => (
-  <div className="App">
-    <Grid container spacing={8}>
-      <Grid item sm={4}>
-        <Paper style={styles.Paper}>
-          <List>
-            {contacts.map(({ number, lastMessage }) => (
-              <ListItem button divider>
-                <ListItemText primary={number} secondary={lastMessage} />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </Grid>
-      <Grid item sm={8}>
-        <Paper style={styles.Paper}>
-          <List>
-            {messages.map(({ messageBody, time, user }) => {
-              const align = user ? "center" : "flex-start"
-              return (
-                <Grid container>
-                  <Grid item alignItems={align} sm={6}>
-                    <ListItem>
-                      <ListItemText primary={messageBody} secondary={time} />
-                    </ListItem>
-                  </Grid>
-                </Grid>
-              )
-            })}
-          </List>
-        </Paper>
+const onPwChange = event => {
+  loginObj.password = event.target.value
+}
+
+const Home = ({ classes, ...props }) => (
+  <Grid container spacing={8} className={classes.root}>
+    <Grid item xs={12}>
+      <Grid container alignItems="center" direction="column" justify="center">
+        <Grid item xs={12}>
+          <h3 style={{ marginBottom: 30 }}>Welcome to Text Campaign</h3>
+        </Grid>
       </Grid>
     </Grid>
-  </div>
+
+    <Grid item xs={12}>
+      <Grid container alignItems="center" direction="column" justify="center">
+        <form>
+          <Grid item xs={12}>
+            <TextField
+              label="User name"
+              placeholder="User name"
+              margin="normal"
+              onChange={onUserNameChange}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              label="Password"
+              placeholder="password"
+              margin="normal"
+              type="password"
+              onChange={onPwChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="raised" color="primary" onClick={() => props.onSignIn(loginObj)}>
+              Sign In
+            </Button>
+          </Grid>
+        </form>
+      </Grid>
+    </Grid>
+
+    <Grid item xs={12}>
+      {props.loading && <Loading />}
+    </Grid>
+
+    <Fade in={props.showError}>
+      <Grid item xs={12}>
+        <Grid container alignItems="center" direction="column" justify="center">
+          <Grid item xs={12}>
+            <span className={classes.error}> Login Credentials Incorrect, please try again </span>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Fade>
+  </Grid>
 )
 
 Home.propTypes = {
-  contacts: PropTypes.string.isRequired,
-  messages: PropTypes.string.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string,
+  }).isRequired,
+  onSignIn: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  showError: PropTypes.bool.isRequired,
 }
 
-export default Home
+export default withStyles(styles)(Home)

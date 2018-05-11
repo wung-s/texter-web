@@ -1,17 +1,53 @@
-import React, { Fragment } from "react"
+import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
+import PropTypes from "prop-types"
 
-import Home from "../components/Home"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import axios from "../helpers/Axios"
+import Login from "../components/Home"
+import { setAccessToken, isLoggedIn } from "../helpers/Auth"
 
-import { mailboxes, contacts, messages } from "../Store"
+class HomeContainer extends Component {
+  static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
+  }
 
-const HomeContainer = () => (
-  <Fragment>
-    <Header />
-    <Home contacts={contacts} messages={messages} />
-    <Footer mailboxes={mailboxes} />
-  </Fragment>
-)
+  state = {
+    loginObj: {},
+    loading: false,
+    showError: false,
+  }
 
-export default HomeContainer
+  componentDidMount() {
+    if (isLoggedIn()) {
+      this.props.history.push("/conversations")
+    }
+  }
+
+  handleSignIn = loginObj => {
+    this.setState({ loading: true, showError: false })
+    axios()
+      .post("/login", loginObj)
+      .then(resp => {
+        const { token } = resp.data
+        setAccessToken(token)
+        this.props.history.push("/conversations")
+      })
+      .catch(() => {
+        this.setState({ showError: true, loading: false })
+      })
+  }
+
+  render() {
+    return (
+      <Login
+        onSignIn={this.handleSignIn}
+        loading={this.state.loading}
+        showError={this.state.showError}
+      />
+    )
+  }
+}
+
+export default withRouter(HomeContainer)

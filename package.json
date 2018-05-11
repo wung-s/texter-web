@@ -16,10 +16,12 @@
     "prettier-eslint-cli": "^4.7.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "material-ui": "^1.0.0-beta.44",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4"
   },
   "scripts": {
