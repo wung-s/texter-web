@@ -6,13 +6,13 @@ import { Tab } from "material-ui/Tabs"
 const Footer = ({ mailboxes }) => (
   <Paper>
     <Tabs indicatorColor="primary" textColor="primary" centered value={1}>
-      {mailboxes.map(mailbox => <Tab label={mailbox} />)}
+      {mailboxes.map(mailbox => <Tab key={mailbox} label={mailbox} />)}
     </Tabs>
   </Paper>
 )
 
 Footer.propTypes = {
-  mailboxes: PropTypes.string.isRequired,
+  mailboxes: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 export default Footer
