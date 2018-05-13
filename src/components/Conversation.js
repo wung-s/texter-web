@@ -1,67 +1,156 @@
-import React from "react"
+import React, { forwardRef, Fragment } from "react"
 import PropTypes from "prop-types"
 import { Grid, Paper, List } from "material-ui"
+import Typography from "material-ui/Typography"
+import TextField from "material-ui/TextField"
 import { ListItem, ListItemText } from "material-ui/List"
 import grey from "material-ui/colors/grey"
+import Button from "material-ui/Button"
+import AppConst from "../config/AppConst"
+
+import NewMessageDialog from "./NewMessageDialog"
 
 const s = {
-  paper: { padding: 20, marginTop: 10, marginBottom: 10, overflowY: "auto", height: 400 },
+  flow: { overflowY: "auto" },
   convActive: { backgroundColor: grey[300] },
 }
 
-const Conversation = ({
-  conversations,
-  messageByConvID,
-  activeConvID,
-  messageListByConvID,
-  onConvClick,
-}) => {
-  const messageList = messageListByConvID[activeConvID] || []
-  return (
-    <div className="App">
-      <Grid container spacing={8}>
-        <Grid item sm={4}>
-          <Paper style={s.paper}>
-            <List>
-              {conversations.map(conv => (
-                <ListItem
-                  key={conv.id}
-                  button
-                  divider
-                  onClick={() => onConvClick(conv.id)}
-                  style={activeConvID === conv.id ? s.convActive : null}
-                >
-                  <ListItemText
-                    primary={messageByConvID[conv.id].from}
-                    secondary={messageByConvID[conv.id].body}
+const Conversation = forwardRef(
+  (
+    {
+      conversations,
+      messageByConvID,
+      activeConvID,
+      messageListByConvID,
+      showNewMessage,
+      submissionInitiated,
+      newMsg,
+      phoneNo,
+      winHeight,
+      onConvClick,
+      onNewMessageClick,
+      onPhoneNoChange,
+      onMessageChange,
+      onNewMessageSend,
+      onMessageSend,
+    },
+    ref
+  ) => {
+    const messageList = messageListByConvID[activeConvID] || []
+    return (
+      <Fragment>
+        <NewMessageDialog
+          visible={showNewMessage}
+          onCancel={onNewMessageClick}
+          onPhoneNoChange={onPhoneNoChange}
+          onMessageChange={onMessageChange}
+          onNewMessageSend={onNewMessageSend}
+          msg={newMsg}
+          phoneNo={phoneNo}
+          submissionInitiated={submissionInitiated}
+        />
+        <Grid container spacing={8}>
+          <Grid item sm={4}>
+            <Paper style={{ ...s.flow, height: winHeight - 150 }}>
+              <List>
+                <ListItem>
+                  <Button color="secondary" variant="raised" onClick={onNewMessageClick}>
+                    New Message
+                  </Button>
+                </ListItem>
+                {conversations.map(conv => {
+                  const displayNo =
+                    messageByConvID[conv.id].direction === "incoming"
+                      ? messageByConvID[conv.id].from
+                      : messageByConvID[conv.id].to
+                  return (
+                    <ListItem
+                      key={conv.id}
+                      button
+                      divider
+                      onClick={() => onConvClick(conv.id)}
+                      style={activeConvID === conv.id ? s.convActive : null}
+                    >
+                      <ListItemText primary={displayNo} secondary={messageByConvID[conv.id].body} />
+                    </ListItem>
+                  )
+                })}
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item sm={8}>
+            <Paper
+              style={{
+                height: winHeight - 150,
+              }}
+            >
+              <Grid container>
+                <Grid item xs={12}>
+                  <ul
+                    style={{
+                      ...s.flow,
+                      height: winHeight - 250,
+                    }}
+                    ref={ref}
+                  >
+                    {messageList.map(({ id, body, createdAt, direction }) => {
+                      const textAlign = direction === "incoming" ? "right" : "left"
+                      return (
+                        <ListItem key={id} style={{ textAlign }}>
+                          <ListItemText primary={body} secondary={createdAt} />
+                        </ListItem>
+                      )
+                    })}
+                  </ul>
+                </Grid>
+                <Grid item xs={10} style={{ paddingLeft: 10 }}>
+                  <TextField
+                    fullWidth
+                    label="Type here"
+                    value={newMsg}
+                    onChange={onMessageChange}
                   />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
+                  <Typography
+                    color={newMsg.trim().length >= AppConst.msgLength ? "error" : "default"}
+                    variant="caption"
+                  >{`${newMsg.trim().length}/${AppConst.msgLength}`}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                    variant="raised"
+                    onClick={onMessageSend}
+                    disabled={
+                      newMsg.trim().length === 0 || newMsg.trim().length >= AppConst.msgLength
+                    }
+                  >
+                    Send
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item sm={8}>
-          <Paper style={s.paper}>
-            <List>
-              {messageList.map(({ id, body, createdAt }) => (
-                <ListItem key={id}>
-                  <ListItemText primary={body} secondary={createdAt} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
-  )
-}
+      </Fragment>
+    )
+  }
+)
 
 Conversation.propTypes = {
   conversations: PropTypes.arrayOf(PropTypes.object),
   messageByConvID: PropTypes.objectOf(PropTypes.object).isRequired,
   activeConvID: PropTypes.string,
   messageListByConvID: PropTypes.objectOf(PropTypes.array).isRequired,
+  showNewMessage: PropTypes.bool.isRequired,
+  submissionInitiated: PropTypes.bool.isRequired,
+  newMsg: PropTypes.string.isRequired,
+  phoneNo: PropTypes.string.isRequired,
+  winHeight: PropTypes.number.isRequired,
   onConvClick: PropTypes.func.isRequired,
+  onNewMessageClick: PropTypes.func.isRequired,
+  onPhoneNoChange: PropTypes.func.isRequired,
+  onMessageChange: PropTypes.func.isRequired,
+  onNewMessageSend: PropTypes.func.isRequired,
+  onMessageSend: PropTypes.func.isRequired,
 }
 
 Conversation.defaultProps = {

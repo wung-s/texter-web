@@ -4,6 +4,8 @@ const AppConfig = {
   userKey: "currentUser",
   accessTokenKey: "accessToken",
   pollingInterval: 10000, // 10 seconds
+  msgLength: 160,
+  phoneNoLength: 10,
 }
 
 export default AppConfig
