@@ -2,9 +2,11 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Grid, Paper, List } from "material-ui"
 import { ListItem, ListItemText } from "material-ui/List"
+import grey from "material-ui/colors/grey"
 
-const styles = {
-  Paper: { padding: 20, marginTop: 10, marginBottom: 10, overflowY: "auto", height: 400 },
+const s = {
+  paper: { padding: 20, marginTop: 10, marginBottom: 10, overflowY: "auto", height: 400 },
+  convActive: { backgroundColor: grey[300] },
 }
 
 const Conversation = ({
@@ -19,31 +21,33 @@ const Conversation = ({
     <div className="App">
       <Grid container spacing={8}>
         <Grid item sm={4}>
-          <Paper style={styles.Paper}>
+          <Paper style={s.paper}>
             <List>
               {conversations.map(conv => (
-                <ListItem button divider key={conv.id} onClick={() => onConvClick(conv.id)}>
-                  <ListItemText primary={conv.id} secondary={messageByConvID[conv.id].body} />
+                <ListItem
+                  key={conv.id}
+                  button
+                  divider
+                  onClick={() => onConvClick(conv.id)}
+                  style={activeConvID === conv.id ? s.convActive : null}
+                >
+                  <ListItemText
+                    primary={messageByConvID[conv.id].from}
+                    secondary={messageByConvID[conv.id].body}
+                  />
                 </ListItem>
               ))}
             </List>
           </Paper>
         </Grid>
         <Grid item sm={8}>
-          <Paper style={styles.Paper}>
+          <Paper style={s.paper}>
             <List>
-              {messageList.map(({ id, body, userID, createdAt }) => {
-                const align = userID ? "center" : "flex-start"
-                return (
-                  <Grid container key={id} alignItems={align}>
-                    <Grid item sm={6}>
-                      <ListItem>
-                        <ListItemText primary={body} secondary={createdAt} />
-                      </ListItem>
-                    </Grid>
-                  </Grid>
-                )
-              })}
+              {messageList.map(({ id, body, createdAt }) => (
+                <ListItem key={id}>
+                  <ListItemText primary={body} secondary={createdAt} />
+                </ListItem>
+              ))}
             </List>
           </Paper>
         </Grid>
