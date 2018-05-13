@@ -6,6 +6,7 @@ import TextField from "material-ui/TextField"
 import { ListItem, ListItemText } from "material-ui/List"
 import grey from "material-ui/colors/grey"
 import Button from "material-ui/Button"
+import moment from "moment"
 import AppConst from "../config/AppConst"
 
 import NewMessageDialog from "./NewMessageDialog"
@@ -84,49 +85,54 @@ const Conversation = forwardRef(
                 height: winHeight - 150,
               }}
             >
-              <Grid container>
-                <Grid item xs={12}>
-                  <ul
-                    style={{
-                      ...s.flow,
-                      height: winHeight - 250,
-                    }}
-                    ref={ref}
-                  >
-                    {messageList.map(({ id, body, createdAt, direction }) => {
-                      const textAlign = direction === "incoming" ? "right" : "left"
-                      return (
-                        <ListItem key={id} style={{ textAlign }}>
-                          <ListItemText primary={body} secondary={createdAt} />
-                        </ListItem>
-                      )
-                    })}
-                  </ul>
+              {messageList.length > 0 && (
+                <Grid container>
+                  <Grid item xs={12}>
+                    <ul
+                      style={{
+                        ...s.flow,
+                        height: winHeight - 250,
+                      }}
+                      ref={ref}
+                    >
+                      {messageList.map(({ id, body, createdAt, direction }) => {
+                        const textAlign = direction === "incoming" ? "right" : "left"
+                        return (
+                          <ListItem key={id} style={{ textAlign }}>
+                            <ListItemText
+                              primary={body}
+                              secondary={moment(createdAt).format("LL HH:MM:SS")}
+                            />
+                          </ListItem>
+                        )
+                      })}
+                    </ul>
+                  </Grid>
+                  <Grid item xs={10} style={{ paddingLeft: 10 }}>
+                    <TextField
+                      fullWidth
+                      label="Type here"
+                      value={newMsg}
+                      onChange={onMessageChange}
+                    />
+                    <Typography
+                      color={newMsg.trim().length >= AppConst.msgLength ? "error" : "default"}
+                      variant="caption"
+                    >{`${newMsg.trim().length}/${AppConst.msgLength}`}</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button
+                      variant="raised"
+                      onClick={onMessageSend}
+                      disabled={
+                        newMsg.trim().length === 0 || newMsg.trim().length >= AppConst.msgLength
+                      }
+                    >
+                      Send
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={10} style={{ paddingLeft: 10 }}>
-                  <TextField
-                    fullWidth
-                    label="Type here"
-                    value={newMsg}
-                    onChange={onMessageChange}
-                  />
-                  <Typography
-                    color={newMsg.trim().length >= AppConst.msgLength ? "error" : "default"}
-                    variant="caption"
-                  >{`${newMsg.trim().length}/${AppConst.msgLength}`}</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Button
-                    variant="raised"
-                    onClick={onMessageSend}
-                    disabled={
-                      newMsg.trim().length === 0 || newMsg.trim().length >= AppConst.msgLength
-                    }
-                  >
-                    Send
-                  </Button>
-                </Grid>
-              </Grid>
+              )}
             </Paper>
           </Grid>
         </Grid>

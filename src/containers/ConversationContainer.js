@@ -45,7 +45,7 @@ class ConversationContainer extends Component {
   }
 
   scrollToBottom = () => {
-    if (this.msgListRef) {
+    if (this.msgListRef && this.msgListRef.current) {
       const scrollHeight = this.msgListRef.current.scrollHeight
       const height = this.msgListRef.current.clientHeight
       const maxScrollTop = scrollHeight - height
@@ -140,10 +140,9 @@ class ConversationContainer extends Component {
     this.setState({ submissionInitiated: true })
 
     if (phoneNo.length === 10 && newMsg.length < 160 && newMsg.length !== 0) {
-      // submissionInitiated form
       this.sendMessage(`+1${phoneNo}`, newMsg).then(resp => {
         const activeConvID = resp.data.conversationId
-        this.setState({ showNewMessage: false })
+        this.setState({ showNewMessage: false, newMsg: "" })
         this.fetchAllConversations()
         this.fetchConversationMessages(activeConvID)
         this.setState({ activeConvID })
