@@ -60,23 +60,17 @@ export const contacts = [
   },
 ]
 
-export const messages = [
+export const users = [
   {
-    messageId: 1001,
-    userId: 101,
-    number: "647-995-9068",
-    messageBody: "Where is taking place?",
-    time: "2011-10-05T14:48:00.000Z",
-    user: null,
-    readStatus: true,
+    userID: "2d477654-d115-4595-b22b-b19582e83e21",
+    firstName: "Jey",
+    lastName: "Jeyarasalingam",
+    phoneNumber: "416-892-8559",
   },
   {
-    messageId: 1001,
-    userId: 101,
-    number: "647-995-9068",
-    messageBody: "Where?",
-    time: "2011-10-05T14:48:00.000Z",
-    user: "Jey",
-    readStatus: true,
+    userID: "2d477654-d115-4595-s53b-b19582e83w29",
+    firstName: "Wung",
+    lastName: "Shaiza",
+    phoneNumber: "647-435-6543",
   },
 ]
