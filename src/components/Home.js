@@ -1,12 +1,11 @@
 import PropTypes from "prop-types"
 import React from "react"
-
-import Grid from "material-ui/Grid"
-import { withStyles } from "material-ui/styles"
-import Button from "material-ui/Button"
-import TextField from "material-ui/TextField"
-import Fade from "material-ui/transitions/Fade"
-import red from "material-ui/colors/red"
+import Grid from "@material-ui/core/Grid"
+import { withStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+import TextField from "@material-ui/core/TextField"
+import Fade from "@material-ui/core/Fade"
+import red from "@material-ui/core/colors/red"
 
 import Loading from "./Loading"
 

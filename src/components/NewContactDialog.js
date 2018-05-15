@@ -1,10 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Button from "material-ui/Button"
-import Grid from "material-ui/Grid"
-import TextField from "material-ui/TextField"
-import Dialog, { DialogActions, DialogContent, DialogTitle } from "material-ui/Dialog"
-import red from "material-ui/colors/red"
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import TextField from "@material-ui/core/TextField"
+import Dialog from "@material-ui/core/Dialog"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogActions from "@material-ui/core/DialogActions"
+import red from "@material-ui/core/colors/red"
 
 import AppConst from "../config/AppConst"
 

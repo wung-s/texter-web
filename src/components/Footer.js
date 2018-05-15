@@ -1,7 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Paper, Tabs } from "material-ui"
-import { Tab } from "material-ui/Tabs"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Paper from "@material-ui/core/Paper"
 
 const Footer = ({ mailboxes }) => (
   <Paper>

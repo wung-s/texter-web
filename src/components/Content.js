@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Grid } from "material-ui"
+import Grid from "@material-ui/core/Grid"
 
 const Content = props => (
   <Grid container style={{ padding: "5px 10px" }}>
