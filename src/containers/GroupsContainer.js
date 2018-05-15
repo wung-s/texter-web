@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react"
 import Groups from "../components/Groups"
 import Header from "../components/Header"
 import axios from "../helpers/Axios"
+import { normalizeById } from "../helpers/normalizer"
 
 class GroupsContainer extends Component {
   state = {
@@ -26,6 +27,7 @@ class GroupsContainer extends Component {
   handleNewGrpClick = () => {
     this.setState({ showNewGrp: true, submissionInitiated: false })
   }
+
   handleGrpNameChange = e => {
     this.setState({ newGrpName: e.target.value })
   }
@@ -57,7 +59,7 @@ class GroupsContainer extends Component {
     this.setState({ activeGrpID: id })
   }
 
-  normalizeGroupsById = data =>
+  normalizeById = data =>
     data.reduce((res, e) => {
       res[e.id] = e
       return res
@@ -70,7 +72,7 @@ class GroupsContainer extends Component {
         const grps = resp.data || []
         const id = grps.length > 0 ? grps[0].id : ""
         this.setState({
-          groupsByID: this.normalizeGroupsById(resp.data),
+          groupsByID: normalizeById(resp.data),
         })
         return id
       })

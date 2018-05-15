@@ -128,7 +128,9 @@ class ConversationContainer extends Component {
     })
 
   handlePhoneNoChange = e => {
-    this.setState({ phoneNo: e.target.value })
+    if (!isNaN(e.target.value)) {
+      this.setState({ phoneNo: e.target.value })
+    }
   }
 
   handleMessageChange = e => {
