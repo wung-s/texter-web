@@ -4,9 +4,8 @@ import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import { withRouter } from "react-router-dom"
-import Button from "@material-ui/core/Button"
-
 import { logout } from "../helpers/Auth"
+import HeaderNav from "./HeaderNav"
 
 const signout = history => {
   history.push("/")
@@ -16,12 +15,13 @@ const signout = history => {
 const Header = ({ history }) => (
   <AppBar position="static">
     <Toolbar>
-      <Typography variant="title" color="inherit">
+      <Typography variant="title" color="inherit" style={{ flex: 1 }}>
         RallyCHQ
       </Typography>
-      <Button color="inherit" onClick={() => signout(history)}>
-        Logout
-      </Button>
+      <HeaderNav title={"Conversations"} to={"/conversations"} />
+      <HeaderNav title={"Contacts"} to={"/contacts"} />
+      <HeaderNav title={"Groups"} to={"/groups"} />
+      <HeaderNav title={"Logout"} to={""} onClick={() => signout(history)} />
     </Toolbar>
   </AppBar>
 )
