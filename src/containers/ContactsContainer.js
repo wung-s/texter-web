@@ -78,10 +78,10 @@ class ContactsContainer extends Component {
     axios()
       .get("/contacts")
       .then(resp => {
-        const contacts = resp.data || []
+        const contacts = resp.data.contacts || []
         const id = contacts.length > 0 ? contacts[0].id : ""
         this.setState({
-          contactsByID: normalizeById(resp.data),
+          contactsByID: normalizeById(contacts),
         })
         return id
       })

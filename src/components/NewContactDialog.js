@@ -68,7 +68,7 @@ const NewContactDialog = props => (
         Cancel
       </Button>
       <Button onClick={props.onConfirm} color="primary">
-        Send
+        Add
       </Button>
     </DialogActions>
   </Dialog>
