@@ -51,65 +51,67 @@ const Groups = props => (
           </Grid>
 
           <Grid item sm={8}>
-            <Grid container>
-              <Grid item xs={12}>
-                {props.activeGrpID && (
-                  <Fragment>
-                    <Typography variant="title">Name</Typography>
-                    <Typography variant="body1">
-                      {props.activeGrpID && props.groupsByID[props.activeGrpID].name}
-                    </Typography>
+            {props.activeGrpID !== "" && (
+              <Grid container>
+                <Grid item xs={12}>
+                  {props.activeGrpID && (
+                    <Fragment>
+                      <Typography variant="title">Name</Typography>
+                      <Typography variant="body1">
+                        {props.activeGrpID && props.groupsByID[props.activeGrpID].name}
+                      </Typography>
 
-                    <Typography variant="title">Description</Typography>
-                    <Typography variant="body1">
-                      {props.activeGrpID && props.groupsByID[props.activeGrpID].description}
-                    </Typography>
-                  </Fragment>
-                )}
-              </Grid>
+                      <Typography variant="title">Description</Typography>
+                      <Typography variant="body1">
+                        {props.activeGrpID && props.groupsByID[props.activeGrpID].description}
+                      </Typography>
+                    </Fragment>
+                  )}
+                </Grid>
 
-              <Grid item xs={12}>
-                <Button color="primary" variant="outlined" onClick={props.onAddContactsClick}>
-                  Add Contacts
-                </Button>
-              </Grid>
+                <Grid item xs={12}>
+                  <Button color="primary" variant="outlined" onClick={props.onAddContactsClick}>
+                    Add Contacts
+                  </Button>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>First Name</TableCell>
-                      <TableCell>Last Name</TableCell>
-                      <TableCell>Phone No</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.keys(props.grpContactsByID).map(id => (
-                      <TableRow key={id}>
-                        <TableCell>{props.grpContactsByID[id].firstName}</TableCell>
-                        <TableCell>{props.grpContactsByID[id].lastName}</TableCell>
-                        <TableCell>{props.grpContactsByID[id].phoneNo}</TableCell>
+                <Grid item xs={12}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>First Name</TableCell>
+                        <TableCell>Last Name</TableCell>
+                        <TableCell>Phone No</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                <TablePagination
-                  component="div"
-                  page={props.contactPagination.page - 1}
-                  count={props.contactPagination.totalContacts}
-                  rowsPerPage={props.contactPagination.perPage}
-                  rowsPerPageOptions={[10, 20, 30]}
-                  backIconButtonProps={{
-                    "aria-label": "Previous",
-                  }}
-                  nextIconButtonProps={{
-                    "aria-label": "Next",
-                  }}
-                  onChangePage={props.onContactsExistingChangePage}
-                  onChangeRowsPerPage={props.onContactsExistingRowsPerPageChange}
-                />
+                    </TableHead>
+                    <TableBody>
+                      {Object.keys(props.grpContactsByID).map(id => (
+                        <TableRow key={id}>
+                          <TableCell>{props.grpContactsByID[id].firstName}</TableCell>
+                          <TableCell>{props.grpContactsByID[id].lastName}</TableCell>
+                          <TableCell>{props.grpContactsByID[id].phoneNo}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  <TablePagination
+                    component="div"
+                    page={props.contactPagination.page - 1}
+                    count={props.contactPagination.totalContacts}
+                    rowsPerPage={props.contactPagination.perPage}
+                    rowsPerPageOptions={[10, 20, 30]}
+                    backIconButtonProps={{
+                      "aria-label": "Previous",
+                    }}
+                    nextIconButtonProps={{
+                      "aria-label": "Next",
+                    }}
+                    onChangePage={props.onContactsExistingChangePage}
+                    onChangeRowsPerPage={props.onContactsExistingRowsPerPageChange}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>

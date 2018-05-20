@@ -6,6 +6,7 @@ import axios from "../helpers/Axios"
 import Conversation from "../components/Conversation"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import { normalizeById } from "../helpers/normalizer"
 
 import { mailboxes } from "../Store"
 
@@ -22,9 +23,13 @@ class ConversationContainer extends Component {
     phoneError: false,
     msgError: false,
     winHeight: 500,
+    recipient: "group",
+    groupsByID: {},
+    selectedGrpID: "",
   }
 
   async componentDidMount() {
+    this.fetchAllGroup()
     const activeConvID = await this.fetchAllConversations()
     if (activeConvID) {
       this.fetchConversationMessages(activeConvID)
@@ -62,6 +67,21 @@ class ConversationContainer extends Component {
 
   startPolling = () => {
     this.intervalId = setInterval(() => this.pageDataLoader(), AppConst.pollingInterval)
+  }
+
+  handleGroupSelect = e => {
+    const selectedGrpID = e.target.value
+    this.setState(() => ({
+      selectedGrpID,
+    }))
+  }
+
+  fetchAllGroup = () => {
+    axios()
+      .get("/groups")
+      .then(resp => {
+        this.setState({ groupsByID: normalizeById(resp.data) })
+      })
   }
 
   fetchAllConversations = () =>
@@ -118,6 +138,8 @@ class ConversationContainer extends Component {
       phoneNo: "",
       newMsg: "",
       submissionInitiated: false,
+      selectedGrpID: "",
+      recipient: "individual",
     })
   }
 
@@ -137,19 +159,40 @@ class ConversationContainer extends Component {
     this.setState({ newMsg: e.target.value })
   }
 
-  handleNewMessageSend = () => {
+  handleNewMessageSend = async () => {
     const { newMsg, phoneNo } = this.state
-    this.setState({ submissionInitiated: true })
-
-    if (phoneNo.length === 10 && newMsg.length < 160 && newMsg.length !== 0) {
-      this.sendMessage(`+1${phoneNo}`, newMsg).then(resp => {
+    this.setState(() => ({ submissionInitiated: true }))
+    if (this.state.recipient === "individual") {
+      if (phoneNo.length === 10 && newMsg.length < 160 && newMsg.length !== 0) {
+        const resp = await this.sendMessage(`+1${phoneNo}`, newMsg)
         const activeConvID = resp.data.conversationId
         this.setState({ showNewMessage: false, newMsg: "" })
-        this.fetchAllConversations()
+        this.setState({ showNewMessage: false, newMsg: "" })
         this.fetchConversationMessages(activeConvID)
         this.setState({ activeConvID })
-      })
+      }
     }
+
+    if (newMsg.length < 160 && newMsg.length !== 0 && this.state.selectedGrpID !== "") {
+      await this.sendMessageToGroup(this.state.selectedGrpID, newMsg)
+      this.setState({ showNewMessage: false, newMsg: "" })
+    }
+
+    this.fetchAllConversations()
+  }
+
+  sendMessageToGroup = (grpID, body) =>
+    axios().post("messages/groups", {
+      groupID: grpID,
+      body,
+    })
+
+  handleRecipientChange = e => {
+    const recipient = e.target.value
+    this.setState(() => ({
+      recipient,
+      selectedGrpID: "",
+    }))
   }
 
   handleMessageSend = () => {
@@ -175,6 +218,8 @@ class ConversationContainer extends Component {
           onMessageChange={this.handleMessageChange}
           onNewMessageSend={this.handleNewMessageSend}
           onMessageSend={this.handleMessageSend}
+          onRecipientChange={this.handleRecipientChange}
+          onGroupSelect={this.handleGroupSelect}
           ref={this.msgListRef}
         />
         <Footer mailboxes={mailboxes} />

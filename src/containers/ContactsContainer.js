@@ -61,7 +61,7 @@ class ContactsContainer extends Component {
         .post("/contacts", {
           firstName: this.state.newCttFname,
           lastName: this.state.newCttLname,
-          phoneNo: this.state.newCttPhone,
+          phoneNo: `+1${this.state.newCttPhone}`,
         })
         .then(() => {
           this.fetchAllContacts()
