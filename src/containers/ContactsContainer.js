@@ -15,6 +15,7 @@ class ContactsContainer extends Component {
     contactsByID: {},
     activeCttID: "",
     winHeight: 500,
+    editMode: false,
   }
 
   async componentDidMount() {
@@ -25,9 +26,20 @@ class ContactsContainer extends Component {
     })
   }
 
+  handleEditCttClick = () => {
+    this.setState(prevState => ({
+      showNewCtt: true,
+      editMode: true,
+      newCttFname: prevState.contactsByID[prevState.activeCttID].firstName,
+      newCttLname: prevState.contactsByID[prevState.activeCttID].lastName,
+      newCttPhone: prevState.contactsByID[prevState.activeCttID].phoneNo.replace("+1", ""),
+    }))
+  }
+
   handleNewCttClick = () => {
     this.setState({
       showNewCtt: true,
+      editMode: false,
       submissionInitiated: false,
       newCttFname: "",
       newCttLname: "",
@@ -53,20 +65,24 @@ class ContactsContainer extends Component {
     this.setState({ showNewCtt: false })
   }
 
-  handleNewCttSubmit = () => {
+  handleNewCttSubmit = async () => {
     this.setState({ submissionInitiated: true })
     const phone = this.state.newCttPhone.trim()
     if (phone.length === 10) {
-      axios()
-        .post("/contacts", {
-          firstName: this.state.newCttFname,
-          lastName: this.state.newCttLname,
-          phoneNo: `+1${this.state.newCttPhone}`,
-        })
-        .then(() => {
-          this.fetchAllContacts()
-          this.setState({ showNewCtt: false, submissionInitiated: false })
-        })
+      const data = {
+        firstName: this.state.newCttFname,
+        lastName: this.state.newCttLname,
+        phoneNo: `+1${this.state.newCttPhone}`,
+      }
+
+      if (this.state.editMode) {
+        await axios().put(`/contacts/${this.state.activeCttID}`, data)
+      } else {
+        await axios().post("/contacts", data)
+      }
+
+      this.fetchAllContacts()
+      this.setState({ showNewCtt: false, submissionInitiated: false })
     }
   }
 
@@ -92,6 +108,7 @@ class ContactsContainer extends Component {
         <Header />
         <Contacts
           {...this.state}
+          onEditCttClick={this.handleEditCttClick}
           onNewCttClick={this.handleNewCttClick}
           onCttPhoneChange={this.handleCttPhoneChange}
           onCttLnameChange={this.handleCttLnameChange}

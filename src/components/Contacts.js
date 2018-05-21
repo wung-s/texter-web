@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import List from "@material-ui/core/List"
 import Grid from "@material-ui/core/Grid"
@@ -47,22 +47,33 @@ const Contacts = props => (
 
           <Grid item sm={8}>
             {props.activeCttID && (
-              <Fragment>
-                <Typography variant="title">First Name</Typography>
-                <Typography variant="body1">
-                  {props.activeCttID && props.contactsByID[props.activeCttID].firstName}
-                </Typography>
+              <Grid container spacing={24}>
+                <Grid item xs={6}>
+                  <Typography variant="title">First Name</Typography>
+                  <Typography variant="body1">
+                    {props.activeCttID && props.contactsByID[props.activeCttID].firstName}
+                  </Typography>
+                </Grid>
 
-                <Typography variant="title">Last Name</Typography>
-                <Typography variant="body1">
-                  {props.activeCttID && props.contactsByID[props.activeCttID].lastName}
-                </Typography>
+                <Grid item xs={6}>
+                  <Typography variant="title">Last Name</Typography>
+                  <Typography variant="body1">
+                    {props.activeCttID && props.contactsByID[props.activeCttID].lastName}
+                  </Typography>
+                </Grid>
 
-                <Typography variant="title">Phone No</Typography>
-                <Typography variant="body1">
-                  {props.activeCttID && props.contactsByID[props.activeCttID].phoneNo}
-                </Typography>
-              </Fragment>
+                <Grid item xs={6}>
+                  <Typography variant="title">Phone No</Typography>
+                  <Typography variant="body1">
+                    {props.activeCttID && props.contactsByID[props.activeCttID].phoneNo}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button color="secondary" variant="outlined" onClick={props.onEditCttClick}>
+                    Edit
+                  </Button>
+                </Grid>
+              </Grid>
             )}
           </Grid>
         </Grid>
@@ -70,6 +81,8 @@ const Contacts = props => (
 
       <NewContactDialog
         submissionInitiated={props.submissionInitiated}
+        lastName={props.newCttLname}
+        firstName={props.newCttFname}
         phone={props.newCttPhone}
         visible={props.showNewCtt}
         onPhoneChange={props.onCttPhoneChange}
@@ -87,6 +100,8 @@ Contacts.propTypes = {
   contactsByID: PropTypes.objectOf(PropTypes.object).isRequired,
   activeCttID: PropTypes.string.isRequired,
   newCttPhone: PropTypes.string.isRequired,
+  newCttLname: PropTypes.string.isRequired,
+  newCttFname: PropTypes.string.isRequired,
   showNewCtt: PropTypes.bool.isRequired,
   onCttPhoneChange: PropTypes.func.isRequired,
   onCttLnameChange: PropTypes.func.isRequired,
@@ -94,6 +109,7 @@ Contacts.propTypes = {
   onNewCttCancel: PropTypes.func.isRequired,
   onNewCttSubmit: PropTypes.func.isRequired,
   onNewCttClick: PropTypes.func.isRequired,
+  onEditCttClick: PropTypes.func.isRequired,
   winHeight: PropTypes.number.isRequired,
 }
 

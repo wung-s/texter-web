@@ -27,6 +27,7 @@ const NewContactDialog = props => (
           <TextField
             autoFocus
             margin="dense"
+            value={props.firstName}
             label="First Name"
             fullWidth
             onChange={props.onFnameChange}
@@ -40,6 +41,7 @@ const NewContactDialog = props => (
           <TextField
             margin="dense"
             label="Last Name"
+            value={props.lastName}
             fullWidth
             onChange={props.onLnameChange}
             rows={3}
@@ -68,7 +70,7 @@ const NewContactDialog = props => (
         Cancel
       </Button>
       <Button onClick={props.onConfirm} color="primary">
-        Add
+        Submit
       </Button>
     </DialogActions>
   </Dialog>
@@ -78,6 +80,8 @@ NewContactDialog.propTypes = {
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   phone: PropTypes.string.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
   submissionInitiated: PropTypes.bool.isRequired,
   onPhoneChange: PropTypes.func.isRequired,
   onFnameChange: PropTypes.func.isRequired,
