@@ -28,7 +28,7 @@ const Groups = props => (
   <Content>
     <Grid container>
       <Grid item xs={12}>
-        <Button color="secondary" variant="raised" onClick={props.onNewGrpClick}>
+        <Button color="primary" variant="raised" onClick={props.onNewGrpClick}>
           + Add New Group
         </Button>
       </Grid>

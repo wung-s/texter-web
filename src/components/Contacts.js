@@ -20,7 +20,7 @@ const Contacts = props => (
   <Content>
     <Grid container>
       <Grid item xs={12}>
-        <Button color="secondary" variant="raised" onClick={props.onNewCttClick}>
+        <Button color="primary" variant="raised" onClick={props.onNewCttClick}>
           + Add New Contact
         </Button>
       </Grid>
@@ -68,9 +68,16 @@ const Contacts = props => (
                     {props.activeCttID && props.contactsByID[props.activeCttID].phoneNo}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button color="secondary" variant="outlined" onClick={props.onEditCttClick}>
+                <Grid item xs={6} />
+
+                <Grid item xs={3}>
+                  <Button color="primary" variant="outlined" onClick={props.onEditCttClick}>
                     Edit
+                  </Button>
+                </Grid>
+                <Grid item xs={3}>
+                  <Button color="secondary" variant="outlined" onClick={props.onDeleteCttClick}>
+                    Delete
                   </Button>
                 </Grid>
               </Grid>
@@ -110,6 +117,7 @@ Contacts.propTypes = {
   onNewCttSubmit: PropTypes.func.isRequired,
   onNewCttClick: PropTypes.func.isRequired,
   onEditCttClick: PropTypes.func.isRequired,
+  onDeleteCttClick: PropTypes.func.isRequired,
   winHeight: PropTypes.number.isRequired,
 }
 

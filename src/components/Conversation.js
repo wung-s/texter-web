@@ -68,7 +68,7 @@ const Conversation = forwardRef(
             <Paper style={{ ...s.flow, height: winHeight - 150 }}>
               <List>
                 <ListItem>
-                  <Button color="secondary" variant="raised" onClick={onNewMessageClick}>
+                  <Button color="primary" variant="raised" onClick={onNewMessageClick}>
                     New Message
                   </Button>
                 </ListItem>

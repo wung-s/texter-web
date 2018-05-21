@@ -7,7 +7,7 @@ const UserForm = () => (
     <TextField fullWidth id="firstName" label="First Name" margin="normal" />
     <TextField fullWidth id="lastName" label="Last Name" margin="normal" />
     <TextField fullWidth id="phoneNumber" label="Phone Number" margin="normal" />
-    <Button color="secondary" variant="raised">
+    <Button color="primary" variant="raised">
       + Create Contact
     </Button>
   </form>

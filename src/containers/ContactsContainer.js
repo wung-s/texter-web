@@ -26,6 +26,17 @@ class ContactsContainer extends Component {
     })
   }
 
+  handleDeleteCttClick = async () => {
+    await axios().delete(`/contacts/${this.state.activeCttID}`)
+    this.setState(() => ({
+      activeCttID: "",
+    }))
+    const activeCttID = await this.fetchAllContacts()
+    this.setState(() => ({
+      activeCttID,
+    }))
+  }
+
   handleEditCttClick = () => {
     this.setState(prevState => ({
       showNewCtt: true,
@@ -109,6 +120,7 @@ class ContactsContainer extends Component {
         <Contacts
           {...this.state}
           onEditCttClick={this.handleEditCttClick}
+          onDeleteCttClick={this.handleDeleteCttClick}
           onNewCttClick={this.handleNewCttClick}
           onCttPhoneChange={this.handleCttPhoneChange}
           onCttLnameChange={this.handleCttLnameChange}
