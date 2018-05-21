@@ -1,5 +1,6 @@
-import React, { Fragment } from "react"
+import React from "react"
 import PropTypes from "prop-types"
+import Checkbox from "@material-ui/core/Checkbox"
 import List from "@material-ui/core/List"
 import Grid from "@material-ui/core/Grid"
 import ListItem from "@material-ui/core/ListItem"
@@ -55,60 +56,89 @@ const Groups = props => (
               <Grid container>
                 <Grid item xs={12}>
                   {props.activeGrpID && (
-                    <Fragment>
-                      <Typography variant="title">Name</Typography>
-                      <Typography variant="body1">
-                        {props.activeGrpID && props.groupsByID[props.activeGrpID].name}
-                      </Typography>
+                    <Grid container spacing={24}>
+                      <Grid item xs={12}>
+                        <Typography variant="title">Name</Typography>
+                        <Typography variant="body1">
+                          {props.activeGrpID && props.groupsByID[props.activeGrpID].name}
+                        </Typography>
+                      </Grid>
 
-                      <Typography variant="title">Description</Typography>
-                      <Typography variant="body1">
-                        {props.activeGrpID && props.groupsByID[props.activeGrpID].description}
-                      </Typography>
-                    </Fragment>
+                      <Grid item xs={12}>
+                        <Typography variant="title">Description</Typography>
+                        <Typography variant="body1">
+                          {props.activeGrpID && props.groupsByID[props.activeGrpID].description}
+                        </Typography>
+                      </Grid>
+
+                      <Grid item xs={3}>
+                        <Button
+                          color="primary"
+                          variant="outlined"
+                          onClick={props.onAddContactsClick}
+                        >
+                          Add Contacts
+                        </Button>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Button
+                          color="primary"
+                          variant="outlined"
+                          disabled={props.selectedContacts.length === 0}
+                          onClick={props.onRemoveContactsClick}
+                        >
+                          Remove Contacts
+                        </Button>
+                      </Grid>
+
+                      {Object.keys(props.grpContactsByID).length > 0 && (
+                        <Grid item xs={12}>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell padding="checkbox">Select</TableCell>
+                                <TableCell>First Name</TableCell>
+                                <TableCell>Last Name</TableCell>
+                                <TableCell>Phone No</TableCell>
+                              </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                              {Object.keys(props.grpContactsByID).map(id => (
+                                <TableRow key={id}>
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      checked={props.selectedContacts.includes(id)}
+                                      onChange={e => props.onNewGrpContactChange(e, id)}
+                                    />
+                                  </TableCell>
+                                  <TableCell>{props.grpContactsByID[id].firstName}</TableCell>
+                                  <TableCell>{props.grpContactsByID[id].lastName}</TableCell>
+                                  <TableCell>{props.grpContactsByID[id].phoneNo}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+
+                          <TablePagination
+                            component="div"
+                            page={props.contactPagination.page - 1}
+                            count={props.contactPagination.totalContacts}
+                            rowsPerPage={props.contactPagination.perPage}
+                            rowsPerPageOptions={[10, 20, 30]}
+                            backIconButtonProps={{
+                              "aria-label": "Previous",
+                            }}
+                            nextIconButtonProps={{
+                              "aria-label": "Next",
+                            }}
+                            onChangePage={props.onContactsExistingChangePage}
+                            onChangeRowsPerPage={props.onContactsExistingRowsPerPageChange}
+                          />
+                        </Grid>
+                      )}
+                    </Grid>
                   )}
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Button color="primary" variant="outlined" onClick={props.onAddContactsClick}>
-                    Add Contacts
-                  </Button>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>First Name</TableCell>
-                        <TableCell>Last Name</TableCell>
-                        <TableCell>Phone No</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Object.keys(props.grpContactsByID).map(id => (
-                        <TableRow key={id}>
-                          <TableCell>{props.grpContactsByID[id].firstName}</TableCell>
-                          <TableCell>{props.grpContactsByID[id].lastName}</TableCell>
-                          <TableCell>{props.grpContactsByID[id].phoneNo}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  <TablePagination
-                    component="div"
-                    page={props.contactPagination.page - 1}
-                    count={props.contactPagination.totalContacts}
-                    rowsPerPage={props.contactPagination.perPage}
-                    rowsPerPageOptions={[10, 20, 30]}
-                    backIconButtonProps={{
-                      "aria-label": "Previous",
-                    }}
-                    nextIconButtonProps={{
-                      "aria-label": "Next",
-                    }}
-                    onChangePage={props.onContactsExistingChangePage}
-                    onChangeRowsPerPage={props.onContactsExistingRowsPerPageChange}
-                  />
                 </Grid>
               </Grid>
             )}
@@ -161,6 +191,7 @@ Groups.propTypes = {
   onGrpDescChange: PropTypes.func.isRequired,
   onGrpNameChange: PropTypes.func.isRequired,
   onNewGrpCancel: PropTypes.func.isRequired,
+  onRemoveContactsClick: PropTypes.func.isRequired,
   onNewGrpSubmit: PropTypes.func.isRequired,
   onNewGrpClick: PropTypes.func.isRequired,
   onAddContactsClick: PropTypes.func.isRequired,

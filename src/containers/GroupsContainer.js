@@ -95,6 +95,27 @@ class GroupsContainer extends Component {
     )
   }
 
+  handleRemoveContactsClick = async () => {
+    const { activeGrpID } = this.state
+    await axios().put(`/groups/${activeGrpID}`, {
+      name: this.state.groupsByID[activeGrpID].name,
+      description: this.state.groupsByID[activeGrpID].description,
+      removeContacts: this.state.selectedContacts,
+    })
+
+    this.setState(() => ({
+      selectedContacts: [],
+    }))
+
+    await this.fetchContactsAndSetPaginator(
+      activeGrpID,
+      1,
+      this.state.contactPagination.perPage,
+      "contactPagination",
+      false
+    )
+  }
+
   handleAddContactsClick = async () => {
     this.setState(() => ({
       addableContactsByID: {},
@@ -153,6 +174,7 @@ class GroupsContainer extends Component {
 
     this.setState(() => ({
       showAddContactDialog: false,
+      selectedContacts: [],
     }))
   }
 
@@ -258,6 +280,7 @@ class GroupsContainer extends Component {
           onAddContactsClick={this.handleAddContactsClick}
           onAddContactsCancel={this.handleAddContactsCancel}
           onAddContactsConfirm={this.handleAddContactsConfirm}
+          onRemoveContactsClick={this.handleRemoveContactsClick}
           onContactsDialogChangePage={this.handleContactsDialogChangePage}
           onContactsDialogRowsPerPageChange={this.handleContactsDialogRowsPerPageChange}
           onContactsExistingChangePage={this.handleContactsExistingChangePage}
